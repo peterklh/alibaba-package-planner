@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>阿里国际站 · 营销保效方案清单</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:#f4f5f7;color:#1f2430;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:22px 16px 70px}
+header{text-align:center;padding:10px 0 20px}
+header h1{font-size:22px;font-weight:700;letter-spacing:.5px}
+header h1 span{color:#ff6a00}
+header p{color:#6b7280;font-size:13px;margin-top:6px}
+.card{background:#fff;border:1px solid #e6e8ec;border-radius:14px;padding:20px 22px;margin-bottom:16px;box-shadow:0 1px 3px rgba(16,24,40,.05)}
+.card h2{font-size:16px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.card h2 .step{background:#ff6a00;color:#fff;width:22px;height:22px;border-radius:50%;font-size:12px;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.hint{color:#9ca3af;font-size:12px}
+/* 预算输入 */
+.input-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.input-box{position:relative;flex:1;min-width:240px;max-width:380px}
+.input-box input{width:100%;font-size:20px;font-weight:700;padding:12px 66px 12px 14px;border:2px solid #d8dbe0;border-radius:10px;outline:none;color:#1f2430;background:#fff}
+.input-box input:focus{border-color:#ff6a00}
+.input-box .unit{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:#9ca3af;font-size:13px}
+.presets{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chip{padding:6px 14px;border-radius:999px;border:1px solid #d8dbe0;background:#fff;font-size:13px;color:#4b5563;cursor:pointer;transition:all .15s}
+.chip:hover{border-color:#ff6a00;color:#ff6a00}
+.chip.on{background:#ff6a00;border-color:#ff6a00;color:#fff}
+.toggle-row{margin-top:14px;display:flex;align-items:center;gap:8px;font-size:13px;color:#4b5563;flex-wrap:wrap}
+.toggle-row input{accent-color:#ff6a00;width:16px;height:16px;cursor:pointer}
+/* 方案计算器 */
+.calc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px}
+.calc-item label{display:block;font-size:12px;color:#6b7280;margin-bottom:6px;font-weight:600}
+.calc-item select{width:100%;font-size:16px;font-weight:600;padding:10px 12px;border:2px solid #d8dbe0;border-radius:10px;outline:none;background:#fff;color:#1f2430;cursor:pointer;appearance:auto}
+.calc-item select:focus{border-color:#ff6a00}
+.calc-item .input-box{max-width:none;min-width:0;flex:none}
+.calc-item .input-box input{font-size:16px;font-weight:600;padding:10px 58px 10px 12px}
+.calc-item.hide{display:none}
+.xm-opts{display:flex;flex-wrap:wrap;gap:6px}
+.xm-opts label{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#374151;cursor:pointer;padding:5px 9px;border:1px solid #e2e5ea;border-radius:8px;background:#fafbfc;transition:all .15s;font-weight:400}
+.xm-opts label.checked{border-color:#ff6a00;background:#fff3e6;color:#c2410c}
+.xm-opts input{accent-color:#ff6a00;margin:0;width:14px;height:14px;cursor:pointer}
+.bind-box{margin-top:14px;background:#fafbfc;border:1px solid #f0f1f4;border-radius:10px;padding:10px 14px;font-size:12.5px;color:#374151}
+.bind-box .b-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;padding:3px 0}
+.bind-box .b-row > b{text-align:right}
+.bind-box .b-row b{color:#1f2430}
+.bind-box .b-total{border-top:1px dashed #e6e8ec;margin-top:5px;padding-top:6px;font-weight:700;color:#c2410c}
+.bind-box .b-total b{color:#c2410c}
+.total-line{display:flex;align-items:baseline;gap:10px;margin-top:14px;background:linear-gradient(180deg,#fff4ea,#ffefe0);border:1px solid #ffc9a3;border-radius:12px;padding:12px 16px;flex-wrap:wrap}
+.total-line .tl{font-size:13px;color:#9a3412;font-weight:600}
+.total-line b{font-size:24px;color:#c2410c;font-weight:700}
+.total-line .hint{font-size:12px;color:#b45309}
+/* 星级匹配结果 */
+.result-box{display:flex;align-items:center;gap:22px;flex-wrap:wrap;padding:16px 4px 4px}
+.big-star{font-size:15px;color:#f5b400;letter-spacing:2px}
+.achieve{font-size:20px;font-weight:700}
+.achieve b{color:#ff6a00;font-size:26px}
+.ladder{display:flex;align-items:stretch;gap:0;margin-top:16px}
+.lstep{flex:1;min-width:0;border:1.5px solid #e6e8ec;border-radius:10px;padding:10px 6px;text-align:center;background:#fafbfc;position:relative}
+.lstep+.lstep{margin-left:8px}
+.lstep .st{font-size:14px;color:#f5b400;letter-spacing:1px}
+.lstep .lb{font-size:12px;color:#6b7280;margin-top:2px}
+.lstep.ok{background:var(--g-bg,#e8f7ee);border-color:var(--g-bd,#7fd3a0)}
+.lstep.ok .lb{color:var(--g-tx,#128a46);font-weight:600}
+.lstep.down{border-style:dashed;opacity:.75}
+.lstep.down .lb{color:#b45309;font-weight:600}
+.lstep.upg{border-style:dashed;background:#fffbeb;border-color:#f5b400}
+.lstep.upg .lb{color:#b45309;font-weight:600}
+.lstep .down-arrow{font-size:11px;color:#b45309;display:block;margin-top:2px}
+.lstep .thr{font-size:11px;color:#9ca3af;margin-top:2px}
+.down-msg{margin-top:14px;background:#fff7ed;border:1px solid #fcd9a8;border-radius:10px;padding:10px 14px;font-size:13px;color:#9a3412}
+.down-msg b{color:#c2410c}
+.ok-msg{margin-top:14px;background:#ecfdf5;border:1px solid #a7e8c4;border-radius:10px;padding:10px 14px;font-size:13px;color:#166534}
+.warn-msg{margin-top:14px;background:#fef2f2;border:1px solid #fbc5c5;border-radius:10px;padding:10px 14px;font-size:13px;color:#991b1b}
+/* 方案卡片 */
+.sec-title{font-size:16px;font-weight:700;margin:22px 0 12px;display:flex;align-items:center;gap:8px}
+.sec-title .badge{background:#1f2430;color:#fff;font-size:11px;padding:2px 10px;border-radius:999px;font-weight:500}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+#g-star{margin-bottom:26px}
+.plan{position:relative;overflow:hidden;background:#fff;border:1.5px solid #e6e8ec;border-radius:14px;padding:18px 18px 14px;cursor:pointer;transition:all .18s;display:flex;flex-direction:column}
+.plan::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#ff6a00,#ffb27d);opacity:0;transition:opacity .18s}
+.plan:hover{border-color:#ffb27d;box-shadow:0 8px 22px rgba(255,106,0,.1);transform:translateY(-2px)}
+.plan.sel{border-color:#ff6a00;box-shadow:0 6px 20px rgba(255,106,0,.16)}
+.plan.sel::before,.plan:hover::before{opacity:1}
+.plan-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.plan-top h3{font-size:15px;font-weight:700;flex:1;min-width:0;line-height:1.35}
+.tag{font-size:11px;padding:2px 8px;border-radius:6px;background:#fff3e6;color:#d9660a;border:1px solid #ffd9b3;font-weight:500;flex:none}
+.tag.blue{background:#eef4ff;color:#2557c7;border-color:#c7d8ff}
+.tag.grey{background:#f3f4f6;color:#4b5563;border-color:#e2e4e8}
+.stars{font-size:13px;color:#f5b400;letter-spacing:1px;flex:none}
+.stars .dim{color:#d8dbe0}
+.money{display:flex;gap:10px;margin:12px 0 2px;flex-wrap:wrap}
+.money .cell{flex:1;min-width:96px;background:#fafbfc;border:1px solid #f0f1f4;border-radius:10px;padding:8px 10px;transition:all .15s}
+.money .lbl{font-size:11px;color:#9ca3af;display:block}
+.money b{font-size:15px;font-weight:700;display:block;margin-top:1px}
+.money .u{font-size:11px;color:#9ca3af}
+.money .cell.hl{background:linear-gradient(180deg,#fff4ea,#ffefe0);border-color:#ffc9a3}
+.money .cell.hl b{color:#c2410c}
+.comps{margin:8px 0 0;list-style:none}
+.comps li{font-size:12.5px;color:#374151;padding:3px 0 3px 18px;position:relative}
+.comps li::before{content:"✓";position:absolute;left:0;color:#16a34a;font-weight:700}
+.comps .amt{color:#6b7280}
+.opt{font-size:12px;color:#9ca3af;padding:5px 0 2px 18px}
+.rewards{display:flex;gap:14px;margin-top:8px;padding-top:8px;border-top:1px dashed #e6e8ec;flex-wrap:wrap}
+.rewards span{font-size:12px;color:#4b5563}
+.rewards b{color:#b45309}
+.plan-foot{display:flex;align-items:center;justify-content:space-between;margin-top:12px;gap:8px}
+.growth-tag{margin-top:10px;background:linear-gradient(90deg,#fff1e6,#ffe3cc);border:1.5px solid #ff6a00;border-radius:8px;padding:5px 12px;font-size:12.5px;color:#9a3412;font-weight:700;display:flex;align-items:center;gap:6px}
+.growth-tag b{font-size:14px;color:#d9480f}
+.status{font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px}
+.status.ok{background:#ecfdf5;color:#128a46;border:1px solid #a7e8c4}
+.status.down{background:#fff7ed;color:#b45309;border:1px solid #fcd9a8}
+.status.no{background:#f9fafb;color:#9ca3af;border:1px solid #e6e8ec}
+.btn{background:#ff6a00;color:#fff;border:none;border-radius:8px;padding:7px 16px;font-size:13px;font-weight:600;cursor:pointer;transition:background .15s}
+.btn:hover{background:#e05e00}
+.btn.ghost{background:#fff;color:#ff6a00;border:1.5px solid #ff6a00;font-weight:600}
+/* 已选方案条 */
+.sel-bar{position:sticky;top:0;z-index:50;background:#1f2430;color:#fff;border-radius:0 0 12px 12px;padding:10px 22px;display:none;align-items:center;gap:16px;flex-wrap:wrap;box-shadow:0 4px 16px rgba(16,24,40,.25)}
+.sel-bar.show{display:flex}
+.sel-bar b{color:#ffb27d}
+.sel-bar .t{font-size:14px;font-weight:600}
+.sel-bar .meta{font-size:12px;color:#c9cdd6}
+.sel-bar .sum{margin-left:auto;font-size:13px}
+.sel-bar .sum b{font-size:18px}
+.sel-bar button{background:none;border:none;color:#9ca3af;font-size:20px;cursor:pointer;line-height:1}
+/* 速查表 */
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{background:#1f2430;color:#fff;padding:9px 10px;text-align:left;font-weight:500;white-space:nowrap}
+td{border-bottom:1px solid #eef0f3;padding:8px 10px;vertical-align:top;color:#374151}
+tr:nth-child(even) td{background:#fafbfc}
+td .st{color:#f5b400}
+.row-ckt td{background:#fff7ed!important}
+footer{text-align:center;color:#9ca3af;font-size:12px;margin-top:26px;line-height:1.8}
+footer .rule{background:#f0f1f4;border-radius:8px;padding:8px 12px;display:inline-block;max-width:820px}
+@media(max-width:760px){
+  .grid{grid-template-columns:1fr}
+  .wrap{padding:14px 10px 50px}
+  .card{padding:14px 12px}
+  .btn{padding:10px 18px}
+  .chip{padding:8px 14px}
+  .xm-opts label{padding:7px 10px}
+  .sel-bar{padding:10px 14px}
+  header h1{font-size:18px}
+}
+@media(max-width:640px){.ladder{flex-wrap:wrap}.lstep{min-width:30%;margin-bottom:8px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>阿里国际站 · 营销保效方案清单</h1>
+  <p>填写预算 → 自动匹配星级 → 未达标自动降级 · 点击方案卡片可选中查看明细</p>
+</header>
+
+<div id="selBar" class="sel-bar">
+  <div>
+    <span class="t" id="selName"></span>
+    <span class="meta" id="selMeta"></span>
+  </div>
+  <div class="sum">方案最低投入 <b id="selTotal"></b></div>
+  <button id="selClear" title="取消选择">×</button>
+</div>
+
+<div class="wrap">
+
+  <div class="sec-title">出口通方案 <span class="badge">补充</span></div>
+  <div class="grid" id="g-ckt"></div>
+
+  <div class="sec-title" id="secStar">星级保效方案(按星级)</div>
+  <div class="grid" id="g-star"></div>
+
+  <div class="card">
+    <h2><span class="step">1</span>方案计算器 · 选择选项自动计算</h2>
+    <div class="calc-grid">
+      <div class="calc-item">
+        <label>会员种类</label>
+        <select id="mtype">
+          <option value="gold" selected>金品诚企</option>
+        </select>
+      </div>
+      <div class="calc-item" id="tierBox">
+        <label>会员等级</label>
+        <select id="tier">
+          <option value="s1" selected>一星邀约(保效)1星</option>
+          <option value="s1x">一星邀约-小满版(保效)1星</option>
+          <option value="s2">实力星选(保效)2星</option>
+          <option value="s3">品质钻享(保效)3星</option>
+          <option value="s4">甄选优商(保效)4星</option>
+          <option value="s5">全球优商(保效)5星</option>
+          <option value="s4n">新甄选优商(4星)全年保效版</option>
+          <option value="s5n">新全球优商(5星)全年保效版</option>
+        </select>
+      </div>
+      <div class="calc-item">
+        <label>会员年限</label>
+        <select id="years">
+          <option value="1" selected>1 年</option>
+          <option value="2">2 年</option>
+        </select>
+      </div>
+      <div class="calc-item" id="adExtraBox">
+        <label>额外广告预算(最低标准以上)</label>
+        <div class="input-box">
+          <input type="number" id="adExtra" min="0" step="1000" placeholder="例如 100000">
+          <span class="unit">元</span>
+        </div>
+      </div>
+      <div class="calc-item" id="adpkgBox">
+        <label>广告包(出口通)</label>
+        <select id="adpkg">
+          <option value="20000" selected>20,000元(基础版)</option>
+          <option value="34000">34,000元(进阶版)</option>
+        </select>
+      </div>
+      <div class="calc-item" id="xmBox">
+        <label>小满(OKKI)产品 · 可多选(Lite/Smart/Pro 三选一)</label>
+        <div class="xm-opts" id="xmOpts">
+          <label data-k="lite"><input type="checkbox" value="12800"> Lite ¥12,800</label>
+          <label data-k="smart"><input type="checkbox" value="26800"> Smart ¥26,800</label>
+          <label data-k="pro"><input type="checkbox" value="39800"> Pro ¥39,800</label>
+          <label data-k="aireach"><input type="checkbox" value="19800"> AiReach ¥19,800</label>
+          <label data-k="shops"><input type="checkbox" value="69800"> OKKI Shops ¥69,800</label>
+        </div>
+      </div>
+    </div>
+    <div class="bind-box" id="bindBox"></div>
+    <div class="total-line">
+      <span class="tl">最终总价</span>
+      <b id="calcTotal">¥0</b>
+      <span class="hint" id="calcHint"></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="step">2</span>星级匹配 · 全部金额满足才显示达标</h2>
+    <div class="result-box">
+      <div>
+        <div class="achieve" id="achieve">选择会员等级 / 年限 / 广告预算自动计算</div>
+        <div class="big-star" id="bigStar"></div>
+      </div>
+      <div style="flex:1;min-width:200px">
+        <div class="ladder" id="ladder"></div>
+      </div>
+    </div>
+    <div id="resultMsg"></div>
+  </div>
+
+  <div class="card" style="margin-top:22px">
+    <h2><span class="step">3</span>全部方案速查表</h2>
+    <div style="overflow-x:auto">
+      <table id="refTable"></table>
+    </div>
+  </div>
+
+  <footer>
+    <div class="rule">
+      <b>计算规则:</b> 总投入 = 金品AI/出口通平台(×会员年限) + AWB(按星级自动匹配) + 全站推AI智投(按星级自动匹配) + 额外广告预算(自填) + 小满/OKKI 产品(可多选:Lite 12,800 / Smart 26,800 / Pro 39,800 三选一,AiReach 19,800、OKKI Shops 69,800 可叠加)。<b>智投 + 额外广告 ≥ 广告标准</b>且小满要求满足,即达标所选星级。<br>
+      <b>全站推AI智投(自动):</b> 1星 1万 / 2星 4万 / 3星 8万 / 4星 11万 / 5星 17万;新甄选 20万 / 新全球 30万。<br>
+      <b>广告标准(智投+额外需≥):</b> 1星 1万 / 2星 10万 / 3星 20万 / 4星 30万 / 5星 50万;新甄选 50万 / 新全球 90万;出口通广告包可选 2万 或 3.4万。<br>
+      <b>小满/OKKI 最低要求:</b> 一星小满版及 2-3星 合计≥2.68万;4-5星 ≥3.98万;新甄选/新全球 ≥10万;1星可选。<br>
+      <b>打底门槛:</b> 1星 10万 / 2星 25万 / 3星 35万 / 4星 60万 / 5星 90万;AWB:1-2星 2万 / 3星 4万 / 4-5星 20万;出口通 2,000元版。<br>
+      <b>保底金额:</b> 1星 10万 / 2星 25万 / 3星 35万 / 4星 60万 / 5星 90万;4星甄选(新甄选优商) 90万;5星甄选(新全球优商) 130万。<br>
+      <b>生效规则:</b> 需选择特定促销包下单,且规定时间内全部订单到款。金额均为最低投入参考,最终以平台实际成交为准。
+    </div>
+  </footer>
+</div>
+
+<script>
+/* ============ 数据 ============ */
+const AWB_RULE = {1:20000, 2:20000, 3:40000, 4:200000, 5:200000};
+const AWB_NAME = {1:'20,000元版', 2:'20,000元版', 3:'40,000元版', 4:'200,000元版', 5:'200,000元版'};
+
+const PLANS = [
+ {id:'ckt1', group:'ckt', name:'出口通 · 基础版', tags:['出口通'], threshold:57800,
+  comps:[{n:'出口通基础平台',v:'35,800元'},{n:'广告',v:'20,000元'},{n:'AWB(2,000元版)',v:'2,000元'}],
+  makeup:'固定组合,不可拆分'},
+ {id:'ckt2', group:'ckt', name:'出口通 · 进阶版', tags:['出口通'], threshold:71800,
+  comps:[{n:'出口通基础平台',v:'35,800元'},{n:'广告',v:'34,000元'},{n:'AWB(2,000元版)',v:'2,000元'}],
+  makeup:'固定组合,不可拆分'},
+
+ {id:'s1', group:'star', star:1, name:'一星邀约(保效)1星', tags:['邀约'], threshold:100000,
+  comps:[{n:'金品AI(1年/2年)',v:'≥9万'},{n:'全站推AI智投',v:'≥1万'}],
+  makeup:'其他(广告、RFQ、橱窗等)·可选', showcase:18000},
+ {id:'s2', group:'star', star:1, name:'一星邀约-小满版(保效)1星', tags:['小满版'], threshold:100000,
+  comps:[{n:'金品AI(1年/2年)',v:'≥9万'},{n:'全站推AI智投',v:'≥1万'},{n:'OKKI CRM smart AI/pro AI 或 Shop专业版',v:'≥2.68万'}],
+  makeup:'其他(广告、RFQ、橱窗等)·可选', showcase:20000},
+
+ {id:'s3', group:'star', star:2, name:'实力星选(保效)2星', tags:[], threshold:250000,
+  comps:[{n:'金品AI(1年/2年)',v:'≥9万'},{n:'广告总金额(含全站推AI智投4万)',v:'≥10万'},{n:'OKKI CRM smart AI/pro AI/AiReach/Shop专业版',v:'≥2.68万'}],
+  makeup:'其他(广告、RFQ、橱窗等)·补足', showcase:24000},
+
+ {id:'s4', group:'star', star:3, name:'品质钻享(保效)3星', tags:[], threshold:350000,
+  comps:[{n:'金品AI(1年/2年)',v:'≥9万'},{n:'广告总金额(含全站推AI智投8万)',v:'≥20万'},{n:'OKKI CRM smart AI/pro AI/AiReach/Shop专业版',v:'≥2.68万'}],
+  makeup:'其他(广告、RFQ、橱窗等)·补足', showcase:36000},
+
+ {id:'s5', group:'star', star:4, name:'甄选优商(保效)4星', tags:[], threshold:600000,
+  comps:[{n:'金品AI(1年/2年)',v:'≥9万'},{n:'广告总金额(含全站推AI智投11万)',v:'≥30万'},{n:'OKKI CRM smart AI/pro AI/AiReach/Shop专业版',v:'≥3.98万'}],
+  makeup:'其他(广告、RFQ、橱窗等)·补足', showcase:72000},
+ {id:'s6', group:'star', star:5, name:'全球优商(保效)5星', tags:[], threshold:900000,
+  comps:[{n:'金品AI(1年/2年)',v:'≥9万'},{n:'广告总金额(含全站推AI智投17万)',v:'≥50万'},{n:'OKKI CRM smart AI/pro AI/AiReach/Shop专业版',v:'≥3.98万'}],
+  makeup:'其他(广告、RFQ、橱窗等)·补足', showcase:72000},
+ {id:'s9', group:'star', star:4, name:'新甄选优商(4星)全年保效版', tags:['全年保效'], threshold:900000,
+  comps:[{n:'金品AI(1年/2年)',v:'≥9万'},{n:'广告总金额(含全站推AI智投20万)',v:'≥50万'},{n:'OKKI总金额(CRM Pro AI/Shop专业版/AiReach)',v:'≥10万'}],
+  makeup:'其他(广告、RFQ、橱窗等)·补足', showcase:72000},
+ {id:'s10', group:'star', star:5, name:'新全球优商(5星)全年保效版', tags:['全年保效'], threshold:1300000,
+  comps:[{n:'金品AI(1年/2年)',v:'≥9万'},{n:'广告总金额(含全站推AI智投30万)',v:'≥90万'},{n:'OKKI总金额(CRM Pro AI/Shop专业版/AiReach)',v:'≥10万'}],
+  makeup:'其他(广告、RFQ、橱窗等)·补足', showcase:78000},
+
+];
+
+/* ============ 工具 ============ */
+const fmt = n => '¥' + n.toLocaleString('zh-CN');
+const wan = n => {
+  if (n % 10000 === 0) return (n/10000) + '万';
+  return (n/10000).toFixed(2).replace(/0+$/,'').replace(/\.$/,'') + '万';
+};
+const starsHTML = s => {
+  let h = '';
+  for (let i=1;i<=5;i++) h += i<=s ? '★' : '<span class="dim">★</span>';
+  return '<span class="stars">' + h + '</span>';
+};
+
+/* 会员等级前置绑定:金品AI(按年限) + AWB(按星级) + 广告最低预算(按星级自动匹配,无选项) */
+const TIERS = {
+  s1:  { label:'一星邀约(保效)1星',       baseLabel:'金品AI(90,000元/年)', base:90000, awb:20000,  star:1, zt:10000,  adStd:10000,  xmReq:0,      floor:100000 },
+  s1x: { label:'一星邀约-小满版(保效)1星', baseLabel:'金品AI(90,000元/年)', base:90000, awb:20000,  star:1, zt:10000,  adStd:10000,  xmReq:26800,  floor:100000 },
+  s2:  { label:'实力星选(保效)2星',       baseLabel:'金品AI(90,000元/年)', base:90000, awb:20000,  star:2, zt:40000,  adStd:100000, xmReq:26800,  floor:250000 },
+  s3:  { label:'品质钻享(保效)3星',       baseLabel:'金品AI(90,000元/年)', base:90000, awb:40000,  star:3, zt:80000,  adStd:200000, xmReq:26800,  floor:350000 },
+  s4:  { label:'甄选优商(保效)4星',       baseLabel:'金品AI(90,000元/年)', base:90000, awb:200000, star:4, zt:110000, adStd:300000, xmReq:39800,  floor:600000 },
+  s5:  { label:'全球优商(保效)5星',       baseLabel:'金品AI(90,000元/年)', base:90000, awb:200000, star:5, zt:170000, adStd:500000, xmReq:39800,  floor:900000 },
+  s4n: { label:'新甄选优商(4星)全年保效版', baseLabel:'金品AI(90,000元/年)', base:90000, awb:200000, star:4, zt:200000, adStd:500000, xmReq:100000, floor:900000 },
+  s5n: { label:'新全球优商(5星)全年保效版', baseLabel:'金品AI(90,000元/年)', base:90000, awb:200000, star:5, zt:300000, adStd:900000, xmReq:100000, floor:1300000 }
+};
+/* 下拉方案 ↔ 下方方案卡片 双向联动映射 */
+const TIER_TO_PLAN = {s1:'s1', s1x:'s2', s2:'s3', s3:'s4', s4:'s5', s5:'s6', s4n:'s9', s5n:'s10'};
+const PLAN_TO_TIER = {s1:'s1', s2:'s1x', s3:'s2', s4:'s3', s5:'s4', s6:'s5', s9:'s4n', s10:'s5n'};
+const CK = { baseLabel:'出口通基础平台(35,800元/年)', base:35800, awb:2000, ad:20000 };
+const PLAN_STD = {1:'一星邀约(保效)1星', 2:'实力星选(保效)2星', 3:'品质钻享(保效)3星', 4:'甄选优商(保效)4星', 5:'全球优商(保效)5星'};
+const GROWTH = {s1:'L1+30%以上', s1x:'L1+30%以上', s2:'L1+50%以上', s3:'L2+25%以上', s4:'L2+35%以上', s5:'L3+20%以上', s4n:'全年L2+35%以上', s5n:'全年L3+20%以上'};
+const XM_ITEMS = {lite:12800, smart:26800, pro:39800, aireach:19800, shops:69800}; // 小满/OKKI 产品价格
+const XM_NAMES = {lite:'Lite', smart:'Smart', pro:'Pro', aireach:'AiReach', shops:'OKKI Shops'};
+const XM_REQ_BY_STAR = {1:0, 2:26800, 3:26800, 4:39800, 5:39800}; // 各星级小满最低要求(Smart/Pro)
+const AD_NOTE = {s1:'全站推AI智投 ≥1万', s1x:'全站推AI智投 ≥1万', s2:'广告总金额(含全站推AI智投4万)≥10万', s3:'广告总金额(含全站推AI智投8万)≥20万', s4:'广告总金额(含全站推AI智投11万)≥30万', s5:'广告总金额(含全站推AI智投17万)≥50万', s4n:'广告总金额(含全站推AI智投20万)≥50万', s5n:'广告总金额(含全站推AI智投30万)≥90万'};
+
+const state = { mtype:'gold', tier:'s1', years:1, xmSel:{lite:false, smart:false, pro:false, aireach:false, shops:false}, adpkg:20000, adExtra:0, budget:0, sel:'s1' };
+
+function xmTotal(){ // 已选小满/OKKI 产品合计金额
+  let t = 0;
+  for (const k in XM_ITEMS) if (state.xmSel[k]) t += XM_ITEMS[k];
+  return t;
+}
+function bindInfo(){ // 全部金额自动计算(出口通广告包可选,星级广告最低自动匹配+额外可填)
+  if (state.mtype === 'ckt'){
+    const base = CK.base * state.years;
+    const ad = state.adpkg;
+    return { isCkt:true, base, awb:CK.awb, ad, bind:base + CK.awb, total:base + CK.awb + ad };
+  }
+  const T = TIERS[state.tier];
+  const base = T.base * state.years;
+  const awb = T.awb, ad = T.zt + state.adExtra, xm = xmTotal(), extra = state.adExtra;
+  return { isCkt:false, T, base, awb, ad, xm, extra, bind:base + awb, total:base + awb + ad + xm };
+}
+function effXm(){ // 当前方案有效小满合计金额(始终由用户勾选)
+  return xmTotal();
+}
+const AD_ZT = {1:10000, 2:40000, 3:80000, 4:110000, 5:170000};    // 全站推AI智投金额(按星级)
+const AD_STD = {1:10000, 2:100000, 3:200000, 4:300000, 5:500000};  // 广告总金额标准(按星级)
+function effXm(){ // 当前方案有效小满合计金额(始终由用户勾选)
+  return xmTotal();
+}
+function xmReqOf(starNum){ // 该星级小满最低要求(当前所选方案优先)
+  const T = TIERS[state.tier];
+  if (T.star === starNum) return T.xmReq;
+  return XM_REQ_BY_STAR[starNum] || 0;
+}
+function xmOK(starNum){ // 星级通用标准:小满合计 ≥ 该星级小满要求
+  return effXm() >= (XM_REQ_BY_STAR[starNum] || 0);
+}
+function planOK(T){ // 所选方案自身要求:总投入 ≥ 保底投入(如有) 且 广告合计 ≥ 广告标准 且 小满合计 ≥ 小满要求
+  return state.budget >= (T.floor || 0) && (T.zt + state.adExtra) >= T.adStd && xmTotal() >= T.xmReq;
+}
+function xmReqText(starNum){ // 小满要求文案(按合计金额)
+  return '≥' + wan(xmReqOf(starNum));
+}
+function adOK(starNum){ // 星级通用标准:实际智投达星级智投构成要求 且 广告合计 ≥ 该星级广告标准
+  const T = TIERS[state.tier];
+  const ztReq = AD_ZT[starNum] || 0;
+  const std = AD_STD[starNum] || 0;
+  return T.zt >= ztReq && (T.zt + state.adExtra) >= std;
+}
+function genericOK(s){ // 星级通用标准:广告 + 小满 均达标
+  return adOK(s) && xmOK(s);
+}
+function starReached(s){ // 阶梯显示:高于所选星级不亮;所选星级按方案要求;以下按通用标准
+  const T = TIERS[state.tier];
+  if (s > T.star) return false;
+  if (s === T.star) return planOK(T);
+  return genericOK(s);
+}
+
+function effOf(p){ // 方案最低投入:星级方案 = 保底金额;续保 = 门槛 + AWB
+  if (p.group === 'ckt') return p.threshold;
+  const t = TIERS[PLAN_TO_TIER[p.id]];
+  return t ? t.floor : (p.threshold + AWB_RULE[p.star]);
+}
+function ladderBase(s){ // 某星级打底门槛(不含续保)
+  return Math.min(...PLANS.filter(p=>p.group==='star'&&p.star===s).map(p=>p.threshold));
+}
+function ladderEff(s){ // 某星级最低达标线(打底 + AWB)
+  return ladderBase(s) + AWB_RULE[s];
+}
+function achievedStar(){ // 0 = 未达任何星级(全部金额满足才算)
+  let x = 0;
+  for (let s=5;s>=1;s--) if (starReached(s)) { x = s; break; }
+  return x;
+}
+
+/* ============ 渲染 ============ */
+const $ = id => document.getElementById(id);
+
+function renderCalc(info){
+  const { isCkt, base, awb, ad, bind, total, T, xm, extra } = info;
+  const selNames = Object.keys(XM_ITEMS).filter(k=>state.xmSel[k]).map(k=>XM_NAMES[k]);
+  let rows = '';
+  if (isCkt){
+    rows =
+      '<div class="b-row"><span>出口通基础平台 × ' + state.years + '年</span><b>' + fmt(base) + '</b></div>' +
+      '<div class="b-row"><span>AWB 绑定(必选·2,000元版)</span><b>' + fmt(awb) + '</b></div>' +
+      '<div class="b-row"><span>广告包(出口通·已选' + wan(ad) + ')</span><b>' + fmt(ad) + '</b></div>';
+  } else {
+    rows =
+      '<div class="b-row"><span>金品AI × ' + state.years + '年</span><b>' + fmt(base) + '</b></div>' +
+      '<div class="b-row"><span>AWB 绑定(必选·' + AWB_NAME[T.star] + ')</span><b>' + fmt(awb) + '</b></div>' +
+      '<div class="b-row"><span>全站推AI智投(自动匹配)</span><b>' + fmt(T.zt) + '</b></div>' +
+      '<div class="b-row"><span>额外广告预算(自填)' + (extra ? ' · ' + wan(extra) : '') + '</span><b>' + (extra ? fmt(extra) : '—') + '</b></div>' +
+      '<div class="b-row"><span>小满/OKKI ' + (selNames.length ? selNames.join(' + ') : '(未选择)') + '</span><b>' + (xm ? fmt(xm) : '—') + '</b></div>' +
+      (T.floor ? '<div class="b-row"><span>保底金额(总价需≥)</span><b>' + fmt(T.floor) + ' (' + wan(T.floor) + ')</b></div>' : '');
+  }
+  rows += '<div class="b-row b-total"><span>合计(全部金额)</span><b>' + fmt(total) + ' (' + wan(total) + ')</b></div>';
+  $('bindBox').innerHTML = rows;
+  $('calcTotal').textContent = fmt(total) + ' (' + wan(total) + ')';
+  if (isCkt){
+    $('calcHint').textContent = '出口通广告包:20,000元(基础版) / 34,000元(进阶版);AWB 2,000元版。';
+  } else {
+    let h = '<b>广告标准:</b> 全站推AI智投 ' + wan(T.zt) + '(自动) + 额外广告 ≥ ' + wan(T.adStd) + ' 即满足广告要求';
+    if (T.xmReq){ h += ';小满/OKKI 合计需 ≥' + wan(T.xmReq); }
+    if (T.floor){ h += ';<b>保底金额:</b> 总价需 ≥' + wan(T.floor); }
+    $('calcHint').innerHTML = h;
+  }
+}
+
+function renderLadder(x){
+  const T = TIERS[state.tier];
+  let h = '';
+  for (let s=5;s>=1;s--){
+    const ok = starReached(s);
+    const cls = ok ? 'ok' : '';
+    const lbl = ok ? '达标' : '未达标';
+    const arrow = '';
+    const thr = s === T.star
+      ? (T.floor ? '方案:保底≥' + wan(T.floor) + ' · 广告≥' + wan(T.adStd) + ' · OKKI≥' + wan(T.xmReq) : '方案:广告≥' + wan(T.adStd) + ' + OKKI≥' + wan(T.xmReq))
+      : '广告≥' + wan(AD_STD[s]) + '(智投≥' + wan(AD_ZT[s]) + ')' + (XM_REQ_BY_STAR[s] ? ' + 小满≥' + wan(XM_REQ_BY_STAR[s]) : '');
+    h += '<div class="lstep '+cls+'"><div class="st">'+ '★'.repeat(s) + '</div>' +
+         '<div class="lb">' + lbl + '</div>' +
+         '<div class="thr">' + thr + '</div>' + arrow + '</div>';
+  }
+  $('ladder').innerHTML = h;
+}
+
+function renderResult(x, info){
+  const big = $('achieve'), bs = $('bigStar'), msg = $('resultMsg');
+  const total = state.budget;
+  if (info.isCkt){
+    big.innerHTML = '出口通方案 · 总投入 <b>' + fmt(total) + '</b>';
+    bs.textContent = '';
+    if (total >= 71800){
+      msg.innerHTML = '<div class="ok-msg">出口通组合达标(基础版 ' + wan(57800) + ' / 进阶版 ' + wan(71800) + ')。</div>';
+    } else if (total >= 57800){
+      msg.innerHTML = '<div class="ok-msg">出口通·基础版达标(' + wan(57800) + ')。若切换进阶版广告包(3.4万),总投入为 ' + wan(71800) + '。</div>';
+    } else {
+      msg.innerHTML = '<div class="warn-msg">总投入低于出口通基础版(' + wan(57800) + '),请核对会员年限与广告最低预算。</div>';
+    }
+    return;
+  }
+  const T = TIERS[state.tier];
+  const s = T.star;
+  if (planOK(T)){
+    big.innerHTML = '<b>' + s + ' 星</b> 全部金额满足 · 达标 ✓';
+    bs.textContent = '★'.repeat(s) + (s<5 ? '☆'.repeat(5-s) : '');
+    msg.innerHTML = '<div class="ok-msg">已满足【' + T.label + '】全部要求(总投入 ' + wan(state.budget) + (T.floor ? ' ≥保底 ' + wan(T.floor) : '') + ';广告 ' + wan(T.zt + state.adExtra) + ' ≥' + wan(T.adStd) + ';小满 ' + wan(xmTotal()) + ' ≥' + wan(T.xmReq) + ')。</div>';
+  } else {
+    const reasons = [];
+    if (T.floor && state.budget < T.floor) reasons.push('总投入 ' + wan(state.budget) + ' 不足保底投入 ' + wan(T.floor) + '(缺 ' + wan(T.floor - state.budget) + ')');
+    if ((T.zt + state.adExtra) < T.adStd) reasons.push('广告合计(智投 ' + wan(T.zt) + ' + 额外 ' + wan(state.adExtra) + ')=' + wan(T.zt + state.adExtra) + ' 不足方案标准 ' + wan(T.adStd) + '(缺 ' + wan(Math.max(0, T.adStd - T.zt - state.adExtra)) + ')');
+    if (xmTotal() < T.xmReq) reasons.push('小满/OKKI 合计 ' + wan(xmTotal()) + ' 不足(方案需 ≥' + wan(T.xmReq) + ')');
+    big.innerHTML = '未达 ' + T.label;
+    bs.textContent = '★'.repeat(x) + (x<5 ? '☆'.repeat(5-x) : '');
+    msg.innerHTML = '<div class="down-msg">原因:' + reasons.join(';') + '。满足后即可达标。</div>';
+  }
+}
+
+function statusBadge(p){
+  if (state.budget <= 0) return '<span class="status no">待输入预算</span>';
+  let allOK;
+  if (p.group === 'star'){
+    const t = TIERS[PLAN_TO_TIER[p.id]];
+    const T = TIERS[state.tier];
+    allOK = (T.zt >= AD_ZT[t.star] && (T.zt + state.adExtra) >= t.adStd) && (xmTotal() >= t.xmReq) && (state.budget >= (t.floor || 0));
+  } else {
+    allOK = state.budget >= effOf(p);
+  }
+  if (allOK) return '<span class="status ok">✓ 金额全部满足</span>';
+  const x = achievedStar();
+  if (x >= 1 && x < p.star) return '<span class="status down">未达标 · 自动降级至' + x + '星</span>';
+  return '<span class="status down">未达标</span>';
+}
+
+function planCard(p){
+  const eff = effOf(p);
+  const awbLine = p.group === 'ckt'
+    ? '' 
+    : '<div class="cell"><span class="lbl">AWB绑定(必选)</span><b>' + fmt(AWB_RULE[p.star]) + '</b><span class="u">' + wan(AWB_RULE[p.star]) + '</span></div>';
+  const isSel = state.sel === p.id;
+  const tags = (p.tags||[]).map(t=>{
+    const cls = t.includes('蓝') ? 'blue' : t.includes('灰') ? 'grey' : '';
+    return '<span class="tag '+cls+'">'+t.replace('蓝','').replace('灰','')+'</span>';
+  }).join('');
+  const starTop = p.group !== 'ckt' ? starsHTML(p.star) : '';
+  const rewards = p.group !== 'ckt'
+    ? '<div class="rewards"><span>橱窗赠送 <b>' + (p.showcase? fmt(p.showcase) : '—') + '</b></span></div>'
+    : '';
+  return '<div class="plan' + (isSel?' sel':'') + '" data-id="' + p.id + '">' +
+    '<div class="plan-top">' + starTop + '<h3>' + p.name + '</h3>' + tags + '</div>' +
+    '<div class="money">' +
+      (p.group==='ckt' ? '<div class="cell"><span class="lbl">出口通会员</span><b>' + fmt(CK.base) + '</b><span class="u">' + wan(CK.base) + '</span></div>' : '') +
+      awbLine +
+      '<div class="cell hl"><span class="lbl">' + (p.group==='ckt' ? '组合总价' : (p.group==='star' ? '最低投入(保底金额)' : '最低投入(含AWB)')) + '</span><b>' + fmt(eff) + '</b><span class="u">' + wan(eff) + '</span></div>' +
+    '</div>' +
+    (p.group==='star' ? '<div class="growth-tag">增长目标:<b>' + GROWTH[PLAN_TO_TIER[p.id]] + '</b></div>' : '') +
+    '<ul class="comps">' + p.comps.map(c=>'<li>' + c.n + ' <span class="amt">' + c.v + '</span></li>').join('') + '</ul>' +
+    '<div class="opt">' + p.makeup + '</div>' +
+    rewards +
+    '<div class="plan-foot">' + statusBadge(p) +
+    '<button class="btn' + (isSel?' ghost':'') + '">' + (isSel?'已选择 ✓':'选择本方案') + '</button></div>' +
+  '</div>';
+}
+
+function renderPlans(){
+  $('g-ckt').innerHTML = PLANS.filter(p=>p.group==='ckt').map(planCard).join('');
+  $('g-star').innerHTML = PLANS.filter(p=>p.group==='star').sort((a,b)=>a.star-b.star).map(planCard).join('');
+  document.querySelectorAll('.plan').forEach(el=>{
+    el.addEventListener('click', e=>{
+      if (e.target.closest('button')) return;
+      const id = el.dataset.id;
+      state.sel = (state.sel === id) ? null : id;
+      if (state.sel && PLAN_TO_TIER[state.sel]){
+        state.tier = PLAN_TO_TIER[state.sel];
+        $('tier').value = state.tier;
+      }
+      applyXmDefault();
+      sync();
+    });
+  });
+}
+
+function renderSelBar(){
+  const bar = $('selBar');
+  if (!state.sel){ bar.classList.remove('show'); return; }
+  const p = PLANS.find(x=>x.id===state.sel);
+  bar.classList.add('show');
+  $('selName').textContent = p.name;
+  $('selMeta').textContent = (p.group==='ckt' ? '出口通方案 · 固定组合' : p.star + ' 星保效方案 · ' + (p.comps.map(c=>c.v).join(' + '))) + (p.group!=='ckt' ? ' · AWB绑定 ' + AWB_NAME[p.star] : '');
+  $('selTotal').textContent = fmt(effOf(p)) + ' (' + wan(effOf(p)) + ')';
+}
+
+function renderTable(){
+  const head = '<tr><th>方案名称</th><th>星级</th><th>保底金额</th><th>AWB绑定</th><th>最低投入</th><th>橱窗赠送</th><th>必选组件</th></tr>';
+  const rows = PLANS.map(p=>{
+    const awb = p.group==='ckt' ? fmt(2000) : fmt(AWB_RULE[p.star]);
+    const cls = p.group==='ckt' ? ' class="row-ckt"' : '';
+    return '<tr' + cls + '><td>' + p.name + '</td>' +
+      '<td>' + (p.group==='ckt' ? '<span class="hint">—</span>' : '<span class="st">' + '★'.repeat(p.star) + '</span>') + '</td>' +
+      '<td>' + fmt(p.threshold) + '</td><td>' + awb + '</td>' +
+      '<td><b>' + fmt(effOf(p)) + '</b> (' + wan(effOf(p)) + ')</td>' +
+      '<td>' + (p.showcase? fmt(p.showcase):'—') + '</td>' +
+      '<td>' + p.comps.map(c=>c.n + ' ' + c.v).join('; ') + '</td></tr>';
+  }).join('');
+  $('refTable').innerHTML = head + rows;
+}
+
+function applyXmDefault(){ // 一星邀约-小满版默认勾选小满 Smart
+  if (state.tier === 's1x'){
+    ['lite','pro'].forEach(x=>{ $('xmOpts').querySelector('[data-k="'+x+'"] input').checked = false; });
+    $('xmOpts').querySelector('[data-k="smart"] input').checked = true;
+  }
+}
+function sync(){
+  state.mtype = $('mtype').value;
+  state.tier = $('tier').value;
+  state.years = +$('years').value;
+  state.xmSel = {};
+  document.querySelectorAll('#xmOpts label').forEach(l=>{
+    state.xmSel[l.dataset.k] = l.querySelector('input').checked;
+    l.classList.toggle('checked', l.querySelector('input').checked);
+  });
+  state.adpkg = +$('adpkg').value;
+  state.adExtra = Math.max(0, +($('adExtra').value || 0));
+  $('tierBox').classList.toggle('hide', state.mtype === 'ckt');
+  $('xmBox').classList.toggle('hide', state.mtype !== 'gold');
+  $('adpkgBox').classList.toggle('hide', state.mtype !== 'ckt');
+  $('adExtraBox').classList.toggle('hide', state.mtype !== 'gold');
+  const info = bindInfo();
+  state.budget = info.total;
+  renderCalc(info);
+  const x = achievedStar();
+  renderLadder(x);
+  renderResult(x, info);
+  renderPlans();
+  renderSelBar();
+  renderTable();
+}
+
+$('mtype').addEventListener('change', ()=>{
+  if ($('mtype').value === 'gold'){
+    state.sel = TIER_TO_PLAN[$('tier').value] || null;
+    applyXmDefault();
+  }
+  sync();
+});
+$('tier').addEventListener('change', ()=>{
+  state.sel = TIER_TO_PLAN[$('tier').value] || null;
+  applyXmDefault();
+  sync();
+});
+$('years').addEventListener('change', sync);
+$('xmOpts').addEventListener('change', e=>{
+  const k = e.target.closest('label').dataset.k;
+  if (k === 'lite' || k === 'smart' || k === 'pro'){
+    ['lite','smart','pro'].forEach(x=>{
+      if (x !== k){ const c = $('xmOpts').querySelector('[data-k="'+x+'"] input'); c.checked = false; }
+    });
+  }
+  sync();
+});
+$('adpkg').addEventListener('change', sync);
+$('adExtra').addEventListener('input', sync);
+$('selClear').addEventListener('click', ()=>{ state.sel = null; sync(); });
+sync();
+</script>
+</body>
+</html>
