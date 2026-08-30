@@ -229,8 +229,9 @@ footer .rule{background:#f0f1f4;border-radius:8px;padding:8px 12px;display:inlin
         </select>
       </div>
       <div class="calc-item" id="xmBox">
-        <label>小满(OKKI)产品 · 可多选(Smart/Pro 二选一)</label>
+        <label>小满(OKKI)产品 · 可多选(Lite/Smart/Pro 三选一)</label>
         <div class="xm-opts" id="xmOpts">
+          <label data-k="lite"><input type="checkbox" value="12800"> Lite ¥12,800</label>
           <label data-k="smart"><input type="checkbox" value="32800"> Smart ¥32,800</label>
           <label data-k="pro"><input type="checkbox" value="49800"> Pro ¥49,800</label>
           <label data-k="aireach"><input type="checkbox" value="26800"> AiReach ¥26,800</label>
@@ -335,7 +336,7 @@ footer .rule{background:#f0f1f4;border-radius:8px;padding:8px 12px;display:inlin
 
   <footer>
     <div class="rule">
-      <b>计算规则:</b> 总投入 = 金品AI/出口通平台(×会员年限) + AWB(按星级自动匹配) + 全站推AI智投(按星级自动匹配) + 额外广告预算(自填) + 小满/OKKI 产品(可多选:Smart 32,800 / Pro 49,800 二选一,AiReach 26,800、OKKI Shops 69,800 可叠加)。<b>智投 + 额外广告 ≥ 广告标准</b>且小满要求满足,即达标所选星级。<br>
+      <b>计算规则:</b> 总投入 = 金品AI/出口通平台(×会员年限) + AWB(按星级自动匹配) + 全站推AI智投(按星级自动匹配) + 额外广告预算(自填) + 小满/OKKI 产品(可多选:Lite 12,800 / Smart 32,800 / Pro 49,800 三选一,AiReach 26,800、OKKI Shops 69,800 可叠加)。<b>智投 + 额外广告 ≥ 广告标准</b>且小满要求满足,即达标所选星级。<br>
       <b>全站推AI智投(自动):</b> 1星 1万 / 2星 4万 / 3星 8万 / 4星 11万 / 5星 17万;新甄选 20万 / 新全球 30万。<br>
       <b>广告标准(智投+额外需≥):</b> 1星 1万 / 2星 10万 / 3星 20万 / 4星 30万 / 5星 50万;新甄选 50万 / 新全球 90万;出口通广告包可选 2万 或 3.4万。<br>
       <b>小满/OKKI 最低要求:</b> 一星小满版及 2-3星 合计≥2.68万;4-5星 ≥3.98万;新甄选/新全球 ≥10万;1星可选。<br>
@@ -418,12 +419,12 @@ const PLAN_TO_TIER = {s1:'s1', s2:'s1x', s3:'s2', s4:'s3', s5:'s4', s6:'s5', s9:
 const CK = { baseLabel:'出口通基础平台(35,800元/年)', base:35800, awb:2000, ad:20000 };
 const PLAN_STD = {1:'一星邀约(保效)1星', 2:'实力星选(保效)2星', 3:'品质钻享(保效)3星', 4:'甄选优商(保效)4星', 5:'全球优商(保效)5星'};
 const GROWTH = {s1:'L1+30%以上', s1x:'L1+30%以上', s2:'L1+50%以上', s3:'L2+25%以上', s4:'L2+35%以上', s5:'L3+20%以上', s4n:'全年L2+35%以上', s5n:'全年L3+20%以上'};
-const XM_ITEMS = {smart:32800, pro:49800, aireach:26800, shops:69800}; // 小满/OKKI 产品价格
-const XM_NAMES = {smart:'Smart', pro:'Pro', aireach:'AiReach', shops:'OKKI Shops'};
+const XM_ITEMS = {lite:12800, smart:32800, pro:49800, aireach:26800, shops:69800}; // 小满/OKKI 产品价格
+const XM_NAMES = {lite:'Lite', smart:'Smart', pro:'Pro', aireach:'AiReach', shops:'OKKI Shops'};
 const XM_REQ_BY_STAR = {1:0, 2:26800, 3:26800, 4:39800, 5:39800}; // 各星级小满最低要求(Smart/Pro)
 const AD_NOTE = {s1:'全站推AI智投 ≥1万', s1x:'全站推AI智投 ≥1万', s2:'广告总金额(含全站推AI智投4万)≥10万', s3:'广告总金额(含全站推AI智投8万)≥20万', s4:'广告总金额(含全站推AI智投11万)≥30万', s5:'广告总金额(含全站推AI智投17万)≥50万', s4n:'广告总金额(含全站推AI智投20万)≥50万', s5n:'广告总金额(含全站推AI智投30万)≥90万'};
 
-const state = { mtype:'gold', tier:'s1', years:1, xmSel:{smart:false, pro:false, aireach:false, shops:false}, adpkg:20000, adExtra:0, budget:0, sel:'s1' };
+const state = { mtype:'gold', tier:'s1', years:1, xmSel:{lite:false, smart:false, pro:false, aireach:false, shops:false}, adpkg:20000, adExtra:0, budget:0, sel:'s1' };
 
 function xmTotal(){ // 已选小满/OKKI 产品合计金额
   let t = 0;
@@ -650,7 +651,7 @@ function renderSelBar(){
   const p = PLANS.find(x=>x.id===state.sel);
   bar.classList.add('show');
   $('selName').textContent = p.name;
-  $('selMeta').textContent = (p.group==='ckt' ? '出口通方案 · 固定组合' : p.star + ' 星保效方案 · ' + (p.comps.map(c=>c.v).join(' + '))) + (p.group!=='ckt' ? ' · AWB绑定 ' + AWB_NAME[p.star] : '');
+  $('selMeta').textContent = (p.group==='ckt' ? '出口通方案 · 固定组合' : p.star + ' 星保效方案 · ' + (p.comps.map(c=>c.n + ' ' + c.v).join(' + '))) + (p.group!=='ckt' ? ' · AWB绑定 ' + AWB_NAME[p.star] : '');
   $('selTotal').textContent = fmt(effOf(p)) + ' (' + wan(effOf(p)) + ')';
 }
 
@@ -671,7 +672,7 @@ function renderTable(){
 
 function applyXmDefault(){ // 一星邀约-小满版默认勾选小满 Smart
   if (state.tier === 's1x'){
-    ['pro'].forEach(x=>{ $('xmOpts').querySelector('[data-k="'+x+'"] input').checked = false; });
+    ['lite','pro'].forEach(x=>{ $('xmOpts').querySelector('[data-k="'+x+'"] input').checked = false; });
     $('xmOpts').querySelector('[data-k="smart"] input').checked = true;
   }
 }
@@ -716,8 +717,8 @@ $('tier').addEventListener('change', ()=>{
 $('years').addEventListener('change', sync);
 $('xmOpts').addEventListener('change', e=>{
   const k = e.target.closest('label').dataset.k;
-  if (k === 'smart' || k === 'pro'){
-    ['smart','pro'].forEach(x=>{
+  if (k === 'lite' || k === 'smart' || k === 'pro'){
+    ['lite','smart','pro'].forEach(x=>{
       if (x !== k){ const c = $('xmOpts').querySelector('[data-k="'+x+'"] input'); c.checked = false; }
     });
   }
